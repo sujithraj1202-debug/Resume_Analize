@@ -1,0 +1,1529 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Student Career & Resume AI Agent</title>
+  <!-- Google Fonts: Inter & Outfit -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap"
+    rel="stylesheet">
+  <!-- FontAwesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --bg-dark: #0b0f19;
+      --bg-card: rgba(18, 26, 43, 0.75);
+      --bg-card-hover: rgba(26, 38, 63, 0.85);
+      --border-color: rgba(255, 255, 255, 0.1);
+      --border-highlight: rgba(99, 102, 241, 0.4);
+      --primary: #6366f1;
+      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
+      --accent-cyan: #06b6d4;
+      --accent-green: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --glass-blur: blur(16px);
+      --radius-sm: 8px;
+      --radius-md: 14px;
+      --radius-lg: 20px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      background-image:
+        radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(236, 72, 153, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
+      color: var(--text-main);
+      min-height: 100vh;
+      line-height: 1.6;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header & Navigation */
+    header {
+      backdrop-filter: var(--glass-blur);
+      background: rgba(11, 15, 25, 0.8);
+      border-bottom: 1px solid var(--border-color);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      padding: 1rem 2rem;
+    }
+
+    .header-container {
+      max-width: 1280px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.4rem;
+      font-weight: 800;
+      background: var(--primary-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-icon {
+      width: 40px;
+      height: 40px;
+      background: var(--primary-gradient);
+      border-radius: var(--radius-sm);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 1.2rem;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    }
+
+    nav {
+      display: flex;
+      gap: 0.5rem;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--border-color);
+      overflow-x: auto;
+    }
+
+    .nav-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.6rem 1.1rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-btn:hover {
+      color: var(--text-main);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .nav-btn.active {
+      background: var(--primary);
+      color: white;
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+      font-weight: 600;
+    }
+
+    /* Main Container */
+    main {
+      flex: 1;
+      max-width: 1280px;
+      width: 100%;
+      margin: 2rem auto;
+      padding: 0 1.5rem;
+    }
+
+    /* Glass Cards */
+    .glass-card {
+      background: var(--bg-card);
+      backdrop-filter: var(--glass-blur);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      padding: 1.8rem;
+      margin-bottom: 2rem;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+
+    .glass-card:hover {
+      border-color: var(--border-highlight);
+    }
+
+    .card-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .card-title i {
+      color: var(--primary);
+    }
+
+    /* Action Buttons */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: var(--primary-gradient);
+      color: white;
+      font-family: 'Inter', sans-serif;
+      font-weight: 600;
+      font-size: 0.95rem;
+      padding: 0.75rem 1.5rem;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn:disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color);
+      box-shadow: none;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+    }
+
+    .btn-outline-cyan {
+      background: transparent;
+      border: 1px solid var(--accent-cyan);
+      color: var(--accent-cyan);
+      box-shadow: none;
+    }
+
+    .btn-outline-cyan:hover {
+      background: rgba(6, 182, 212, 0.15);
+    }
+
+    /* Upload Area */
+    .upload-dropzone {
+      border: 2px dashed rgba(99, 102, 241, 0.4);
+      border-radius: var(--radius-md);
+      padding: 2.5rem 1.5rem;
+      text-align: center;
+      background: rgba(99, 102, 241, 0.03);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .upload-dropzone:hover,
+    .upload-dropzone.dragover {
+      border-color: var(--primary);
+      background: rgba(99, 102, 241, 0.08);
+    }
+
+    .upload-icon {
+      font-size: 2.5rem;
+      color: var(--primary);
+      margin-bottom: 0.8rem;
+    }
+
+    .file-input {
+      display: none;
+    }
+
+    .or-divider {
+      display: flex;
+      align-items: center;
+      margin: 1.5rem 0;
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .or-divider::before,
+    .or-divider::after {
+      content: '';
+      flex: 1;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .or-divider span {
+      padding: 0 1rem;
+    }
+
+    textarea,
+    input[type="text"] {
+      width: 100%;
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      color: var(--text-main);
+      padding: 0.9rem 1.2rem;
+      font-family: inherit;
+      font-size: 0.95rem;
+      transition: border-color 0.2s ease;
+      outline: none;
+    }
+
+    textarea:focus,
+    input[type="text"]:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    }
+
+    /* Section Tabs / Panels */
+    .tab-panel {
+      display: none;
+      animation: fadeIn 0.3s ease-in-out;
+    }
+
+    .tab-panel.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Skill Badges & Tags */
+    .tag-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .tag {
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      color: #c7d2fe;
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .tag-success {
+      background: rgba(16, 185, 129, 0.15);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #a7f3d0;
+    }
+
+    .tag-warning {
+      background: rgba(245, 158, 11, 0.15);
+      border-color: rgba(245, 158, 11, 0.3);
+      color: #fde68a;
+    }
+
+    .tag-danger {
+      background: rgba(244, 63, 94, 0.15);
+      border-color: rgba(244, 63, 94, 0.3);
+      color: #fecdd3;
+    }
+
+    /* Top Roles Cards */
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .role-card {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 1.5rem;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .role-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 1rem;
+    }
+
+    .match-badge {
+      background: var(--primary-gradient);
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 0.9rem;
+      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+    }
+
+    .role-title {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Fit Rating Status Banner */
+    .fit-status-banner {
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-md);
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .fit-Strong-Fit {
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #34d399;
+    }
+
+    .fit-Moderate-Fit {
+      background: rgba(6, 182, 212, 0.15);
+      border: 1px solid rgba(6, 182, 212, 0.4);
+      color: #22d3ee;
+    }
+
+    .fit-Needs-Improvement {
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #fbbf24;
+    }
+
+    .fit-Poor-Fit {
+      background: rgba(244, 63, 94, 0.15);
+      border: 1px solid rgba(244, 63, 94, 0.4);
+      color: #f87171;
+    }
+
+    /* Comparison Box */
+    .comparison-box {
+      background: rgba(15, 23, 42, 0.7);
+      border-radius: var(--radius-md);
+      padding: 1.2rem;
+      border-left: 4px solid var(--primary);
+      margin-bottom: 1rem;
+    }
+
+    .comparison-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    /* Loader Overlay */
+    .loader-container {
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 3rem 1rem;
+      text-align: center;
+    }
+
+    .spinner {
+      width: 50px;
+      height: 50px;
+      border: 4px solid rgba(255, 255, 255, 0.1);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 1s infinite linear;
+      margin-bottom: 1.2rem;
+    }
+
+    @keyframes spin {
+      0% {
+        transform: rotate(0deg);
+      }
+
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* Toast Notification */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      right: 2rem;
+      background: #1e293b;
+      color: white;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius-md);
+      border-left: 4px solid var(--primary);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.3s ease;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      border-top: 1px solid var(--border-color);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .quick-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      margin-top: 0.5rem;
+    }
+
+    .chip {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+      padding: 0.3rem 0.7rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .chip:hover {
+      background: rgba(99, 102, 241, 0.2);
+      color: var(--text-main);
+      border-color: var(--primary);
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Top Header Navigation -->
+  <header>
+    <div class="header-container">
+      <div class="brand">
+        <div class="brand-icon"><i class="fa-solid fa-graduation-cap"></i></div>
+        <span>CareerAgent.AI</span>
+      </div>
+
+      <nav id="mainNav">
+        <button class="nav-btn active" data-tab="tab-upload">
+          <i class="fa-solid fa-file-arrow-up"></i> 1. Profile Upload
+        </button>
+        <button class="nav-btn" data-tab="tab-career-fit">
+          <i class="fa-solid fa-bullseye"></i> 2. Career Fit
+        </button>
+        <button class="nav-btn" data-tab="tab-job-checker">
+          <i class="fa-solid fa-user-check"></i> 3. Job Role Checker
+        </button>
+        <button class="nav-btn" data-tab="tab-jd-analyzer">
+          <i class="fa-solid fa-magnifying-glass-chart"></i> 4. JD Analyzer
+        </button>
+        <button class="nav-btn" data-tab="tab-resume-improve">
+          <i class="fa-solid fa-wand-magic-sparkles"></i> 5. Resume Builder
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <!-- Main Work Area -->
+  <main>
+
+    <!-- Global Active Profile Status Banner -->
+    <div id="activeProfileBanner" class="glass-card"
+      style="display: none; padding: 1rem 1.5rem; margin-bottom: 1.5rem; background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.3);">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
+        <div>
+          <i class="fa-solid fa-circle-check" style="color: var(--accent-green);"></i>
+          <span style="font-weight: 600; margin-left: 0.4rem;">Active Profile:</span>
+          <span id="activeProfileName" style="color: var(--accent-cyan); font-weight: 500;">Alex Rivera (Computer
+            Science Student)</span>
+        </div>
+        <button id="btnReUpload" class="btn btn-secondary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">
+          <i class="fa-solid fa-arrows-rotate"></i> Change Profile
+        </button>
+      </div>
+    </div>
+
+    <!-- TAB 1: Profile Upload & Extract -->
+    <section id="tab-upload" class="tab-panel active">
+      <div class="glass-card">
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.2rem;">
+          <div>
+            <h2 class="card-title" style="margin-bottom: 0.3rem;"><i class="fa-solid fa-cloud-arrow-up"></i> Upload
+              Student Profile or Resume</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Upload a PDF/DOCX/TXT file or paste your profile to
+              extract AI insights.</p>
+          </div>
+          <button id="btnLoadDemo" class="btn btn-outline-cyan">
+            <i class="fa-solid fa-bolt"></i> Load Demo Profile (1-Click Test)
+          </button>
+        </div>
+
+        <form id="uploadForm">
+          <div class="upload-dropzone" id="dropzone">
+            <i class="fa-solid fa-file-pdf upload-icon"></i>
+            <h3 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem;">Drag & drop your resume file here
+            </h3>
+            <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Supports PDF, DOCX, or TXT
+              (Max 10MB)</p>
+            <label for="resumeFile" class="btn btn-secondary">
+              <i class="fa-solid fa-folder-open"></i> Browse File
+            </label>
+            <input type="file" id="resumeFile" name="resumeFile" class="file-input" accept=".pdf,.docx,.txt" />
+            <div id="fileSelectedName" style="margin-top: 0.8rem; font-weight: 600; color: var(--accent-cyan);"></div>
+          </div>
+
+          <div class="or-divider">
+            <span>OR PASTE RESUME TEXT BELOW</span>
+          </div>
+
+          <div style="margin-bottom: 1.5rem;">
+            <textarea id="profileText" rows="6"
+              placeholder="Paste full resume text here (Education, Skills, Experience, Projects...)"></textarea>
+          </div>
+
+          <div
+            style="display: flex; justify-content: flex-end; gap: 1rem; align-items: center; flex-wrap: wrap; margin-top: 1.5rem;">
+            <button type="submit" id="btnAnalyzeProfile" class="btn btn-secondary">
+              <i class="fa-solid fa-microchip"></i> Analyze & Extract Profile
+            </button>
+            <button type="button" id="btnNextStep" class="btn">
+              Next: Evaluate Career Fit <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+        </form>
+
+        <!-- Loader -->
+        <div id="parseLoader" class="loader-container">
+          <div class="spinner"></div>
+          <h4 style="font-size: 1.1rem; font-weight: 600; margin-bottom: 0.4rem;">AI is analyzing your profile...</h4>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Extracting skills, experience, projects, strengths &
+            growth areas via OpenRouter API.</p>
+        </div>
+      </div>
+
+      <!-- Parsed Results Container -->
+      <div id="parsedResultCard" class="glass-card" style="display: none;">
+        <h3 class="card-title"><i class="fa-solid fa-id-card"></i> Extracted Student Profile Summary</h3>
+        <div id="parsedSummaryContent"></div>
+      </div>
+    </section>
+
+    <!-- TAB 2: Career Fit (Top 5 Roles) -->
+    <section id="tab-career-fit" class="tab-panel">
+      <div class="glass-card">
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;">
+          <div>
+            <h2 class="card-title" style="margin-bottom: 0.3rem;"><i class="fa-solid fa-bullseye"></i> Top 5 Best-Fit
+              Career Roles</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">AI matches your extracted profile against tech job
+              roles to calculate match scores and growth paths.</p>
+          </div>
+          <button id="btnFetchCareerFit" class="btn">
+            <i class="fa-solid fa-wand-magic"></i> Evaluate Top 5 Roles
+          </button>
+        </div>
+
+        <div id="careerFitLoader" class="loader-container">
+          <div class="spinner"></div>
+          <h4 style="font-size: 1.1rem; font-weight: 600;">Evaluating top job fits...</h4>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Comparing your technical skills, projects, and
+            education with industry demands.</p>
+        </div>
+
+        <div id="careerFitContent" class="role-grid"></div>
+      </div>
+    </section>
+
+    <!-- TAB 3: Job Role Checker -->
+    <section id="tab-job-checker" class="tab-panel">
+      <div class="glass-card">
+        <h2 class="card-title"><i class="fa-solid fa-user-check"></i> Target Job Role Checker</h2>
+        <p style="color: var(--text-muted); font-size: 0.9rem; margin-bottom: 1.2rem;">Enter any target job role to see
+          if you are a Strong Fit, Moderate Fit, Needs Improvement, or Poor Fit.</p>
+
+        <div style="margin-bottom: 1rem;">
+          <label style="display: block; font-weight: 600; margin-bottom: 0.5rem;">Enter Target Role Title:</label>
+          <div style="display: flex; gap: 0.8rem; flex-wrap: wrap;">
+            <input type="text" id="targetRoleInput" placeholder="e.g. Data Analyst, Backend Developer, AI Engineer..."
+              style="flex: 1; min-width: 250px;" />
+            <button id="btnCheckRole" class="btn">
+              <i class="fa-solid fa-magnifying-glass"></i> Check Role Fit
+            </button>
+          </div>
+
+          <div class="quick-chips">
+            <span style="font-size: 0.8rem; color: var(--text-muted); align-self: center;">Popular:</span>
+            <button class="chip" data-role="Data Analyst">Data Analyst</button>
+            <button class="chip" data-role="Full Stack Developer">Full Stack Developer</button>
+            <button class="chip" data-role="Cloud Engineer">Cloud Engineer</button>
+            <button class="chip" data-role="AI / ML Engineer">AI / ML Engineer</button>
+            <button class="chip" data-role="DevOps Engineer">DevOps Engineer</button>
+          </div>
+        </div>
+
+        <div id="roleCheckerLoader" class="loader-container">
+          <div class="spinner"></div>
+          <h4 style="font-size: 1.1rem; font-weight: 600;">Analyzing role fit compatibility...</h4>
+        </div>
+
+        <div id="roleCheckerResults" style="display: none; margin-top: 1.5rem;"></div>
+      </div>
+    </section>
+
+    <!-- TAB 4: JD Analyzer -->
+    <section id="tab-jd-analyzer" class="tab-panel">
+      <div class="glass-card">
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem;">
+          <div>
+            <h2 class="card-title" style="margin-bottom: 0.3rem;"><i class="fa-solid fa-magnifying-glass-chart"></i> Job
+              Description (JD) Gap Analyzer</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Paste a specific job posting description to compare
+              side-by-side with your profile.</p>
+          </div>
+          <button id="btnInsertSampleJD" class="btn btn-outline-cyan" style="font-size: 0.85rem;">
+            <i class="fa-solid fa-paste"></i> Insert Sample JD (Data Analyst)
+          </button>
+        </div>
+
+        <div style="margin-bottom: 1.2rem;">
+          <textarea id="jdInputText" rows="7"
+            placeholder="Paste full Job Description (Responsibilities, Requirements, Skills required)..."></textarea>
+        </div>
+
+        <div style="text-align: right;">
+          <button id="btnAnalyzeJD" class="btn">
+            <i class="fa-solid fa-chart-pie"></i> Compare & Analyze JD
+          </button>
+        </div>
+
+        <div id="jdLoader" class="loader-container">
+          <div class="spinner"></div>
+          <h4 style="font-size: 1.1rem; font-weight: 600;">Comparing profile against Job Description...</h4>
+          <p style="color: var(--text-muted); font-size: 0.9rem;">Calculating ATS score, missing keywords, and
+            experience gaps.</p>
+        </div>
+
+        <div id="jdResults" style="display: none; margin-top: 1.5rem;"></div>
+      </div>
+    </section>
+
+    <!-- TAB 5: Resume Builder & Improver -->
+    <section id="tab-resume-improve" class="tab-panel">
+      <div class="glass-card">
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; margin-bottom: 1.2rem;">
+          <div>
+            <h2 class="card-title" style="margin-bottom: 0.3rem;"><i class="fa-solid fa-wand-magic-sparkles"></i> AI
+              Resume Improvement Engine</h2>
+            <p style="color: var(--text-muted); font-size: 0.9rem;">Get tailored, impactful bullet points and summaries
+              based strictly on your genuine skills.</p>
+          </div>
+          <button id="btnGenerateImprovements" class="btn">
+            <i class="fa-solid fa-pen-nib"></i> Generate Suggestions
+          </button>
+        </div>
+
+        <!-- Ethical AI Notice -->
+        <div
+          style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: var(--radius-md); padding: 0.9rem 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem; font-size: 0.88rem; color: #a5f3fc;">
+          <i class="fa-solid fa-shield-halved" style="font-size: 1.2rem; color: var(--accent-cyan);"></i>
+          <span><strong>Ethical Resume Guarantee:</strong> Suggestions optimize impact, action verbs, and structure
+            using ONLY your verified background. AI will never invent false experience or skills.</span>
+        </div>
+
+        <div id="resumeImproveLoader" class="loader-container">
+          <div class="spinner"></div>
+          <h4 style="font-size: 1.1rem; font-weight: 600;">Writing tailored resume improvements...</h4>
+        </div>
+
+        <div id="resumeImproveResults" style="display: none;"></div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer>
+    <p>Student Career & Resume Agent &copy; 2026. Powered by OpenRouter AI & Node.js backend.</p>
+  </footer>
+
+  <!-- Toast Element -->
+  <div id="toast" class="toast">
+    <i class="fa-solid fa-circle-info" style="color: var(--accent-cyan); font-size: 1.2rem;"></i>
+    <span id="toastMsg">Notification message</span>
+  </div>
+
+  <!-- JavaScript Logic -->
+  <script>
+    // Global State
+    let currentProfile = null;
+
+    // Pre-defined Realistic Demo Profile
+    const DEMO_PROFILE_TEXT = `Alex Rivera
+Email: alex.rivera@university.edu | Phone: (555) 234-5678 | GitHub: github.com/alexrivera-dev | LinkedIn: linkedin.com/in/alexrivera-dev
+
+EDUCATION
+Bachelor of Science in Computer Science | State University, Expected May 2025
+- GPA: 3.82 / 4.0 (Dean's List all semesters)
+- Relevant Coursework: Data Structures & Algorithms, Web Development, Database Systems, Operating Systems, Machine Learning Foundations, Software Engineering Principles.
+
+TECHNICAL SKILLS
+- Programming Languages: Python, JavaScript (ES6+), TypeScript, HTML5, CSS3, SQL (PostgreSQL), C++
+- Frameworks & Tools: React.js, Node.js, Express.js, Tailwind CSS, Git, GitHub, Docker, RESTful APIs
+- Databases: PostgreSQL, MongoDB, SQLite
+- Concepts: Object-Oriented Programming, Agile Methodology, Data Structures, System Design Basics
+
+PROJECTS
+1. Smart Campus Event Finder | React, Node.js, Express, MongoDB, Tailwind CSS
+- Developed a full-stack web application used by 1,200+ campus students to search, filter, and register for student organization events in real-time.
+- Implemented JWT authentication and responsive glassmorphic UI using Tailwind CSS.
+- Optimized database query indexes, improving search response time by 40%.
+
+2. Automated Resume Keyword Analyzer | Python, Flask, NLTK, HTML/CSS
+- Built an NLP-powered resume analyzer tool that extracts skill keywords from job postings and scores candidate resume compatibility.
+- Analyzed over 200 tech job descriptions to generate term frequency rankings and visual gap charts using Chart.js.
+
+INTERNSHIP EXPERIENCE
+Software Development Intern | NextGen Cloud Solutions | June 2024 – August 2024
+- Collaborated with a team of 5 engineers to build reusable React UI components for an enterprise customer portal.
+- Refactored legacy REST API endpoints in Node.js, reducing latency by 25%.
+- Participated in daily scrums, code reviews, and automated unit testing with Jest.
+
+CERTIFICATIONS
+- AWS Certified Cloud Practitioner (2024)
+- Meta Front-End Developer Professional Certificate (Coursera, 2023)
+
+STRENGTHS & HIGHLIGHTS
+- Fast learner with strong computer science fundamentals and passion for modern web technologies.
+- Excellent team communicator and problem solver demonstrated through hackathons and internships.
+- Weaknesses: Limited production experience with microservices architecture and Kubernetes; intermediate experience with CI/CD deployment pipelines.`;
+
+    const SAMPLE_JD_TEXT = `Data Analyst - Junior / Associate
+Location: Remote / New York, NY
+Company: Apex Analytics Inc.
+
+Role Summary:
+We are looking for a motivated Data Analyst with strong technical and analytical skills to join our growing business intelligence team. You will analyze complex datasets, build data visualizations, extract business insights, and collaborate with cross-functional product teams.
+
+Key Responsibilities:
+- Extract, clean, and transform data from relational databases (PostgreSQL/MySQL) using SQL queries.
+- Build interactive dashboards and reports using Tableau, Power BI, or Python visualization libraries (Matplotlib, Seaborn).
+- Analyze user engagement metrics and perform statistical data modeling using Python or R.
+- Present data-driven recommendations to management and key stakeholders.
+
+Requirements:
+- Bachelor's degree in Computer Science, Statistics, Information Systems, or related quantitative field.
+- Proficiency in SQL query writing and database fundamentals.
+- Strong hands-on experience with Python for data analysis (Pandas, NumPy).
+- Experience with Data Visualization tools (Tableau, PowerBI) and Dashboard design.
+- Familiarity with Git version control and Agile development processes.
+- Excellent problem-solving, communication, and presentation skills.`;
+
+    // DOM Elements & State
+    let selectedFile = null;
+    let isNewFilePending = false;
+
+    const mainNav = document.getElementById('mainNav');
+    const navBtns = document.querySelectorAll('.nav-btn');
+    const tabPanels = document.querySelectorAll('.tab-panel');
+    const dropzone = document.getElementById('dropzone');
+    const resumeFileInput = document.getElementById('resumeFile');
+    const fileSelectedName = document.getElementById('fileSelectedName');
+    const profileText = document.getElementById('profileText');
+    const uploadForm = document.getElementById('uploadForm');
+    const btnNextStep = document.getElementById('btnNextStep');
+    const btnLoadDemo = document.getElementById('btnLoadDemo');
+    const parseLoader = document.getElementById('parseLoader');
+    const parsedResultCard = document.getElementById('parsedResultCard');
+    const parsedSummaryContent = document.getElementById('parsedSummaryContent');
+    const activeProfileBanner = document.getElementById('activeProfileBanner');
+    const activeProfileName = document.getElementById('activeProfileName');
+    const btnReUpload = document.getElementById('btnReUpload');
+
+    // Toast Utility
+    function showToast(msg) {
+      const toast = document.getElementById('toast');
+      document.getElementById('toastMsg').innerText = msg;
+      toast.classList.add('show');
+      setTimeout(() => toast.classList.remove('show'), 4000);
+    }
+
+    // Navigation Tab Handler
+    navBtns.forEach(btn => {
+      btn.addEventListener('click', async () => {
+        const targetTab = btn.dataset.tab;
+
+        // If clicking tab 2-5 without an extracted profile, check if file/text is ready to process
+        if (targetTab !== 'tab-upload' && (!currentProfile || isNewFilePending)) {
+          const hasFile = !!selectedFile || (resumeFileInput.files && resumeFileInput.files.length > 0);
+          const textVal = profileText.value.trim();
+
+          if (!hasFile && !textVal && !currentProfile) {
+            showToast('Please upload the file or paste profile text.');
+            switchTab('tab-upload');
+            return;
+          }
+
+          if (hasFile || textVal) {
+            const success = await processProfileExtraction();
+            if (!success && !currentProfile) {
+              switchTab('tab-upload');
+              return;
+            }
+          }
+        }
+
+        switchTab(targetTab);
+      });
+    });
+
+    function switchTab(tabId) {
+      navBtns.forEach(b => {
+        if (b.dataset.tab === tabId) b.classList.add('active');
+        else b.classList.remove('active');
+      });
+
+      tabPanels.forEach(panel => {
+        if (panel.id === tabId) panel.classList.add('active');
+        else panel.classList.remove('active');
+      });
+    }
+
+    // File Selection & Drag-and-Drop Handler
+    function handleFileSelect(file) {
+      if (!file) return;
+
+      const validExts = ['pdf', 'docx', 'txt'];
+      const ext = file.name.split('.').pop().toLowerCase();
+
+      if (!validExts.includes(ext)) {
+        showToast('Unsupported file format. Please upload PDF, DOCX, or TXT.');
+        return;
+      }
+
+      selectedFile = file;
+      isNewFilePending = true;
+      updateFileLabel();
+    }
+
+    function updateFileLabel() {
+      if (selectedFile) {
+        fileSelectedName.innerText = `Selected File: ${selectedFile.name}`;
+      } else if (resumeFileInput.files && resumeFileInput.files.length > 0) {
+        selectedFile = resumeFileInput.files[0];
+        fileSelectedName.innerText = `Selected File: ${selectedFile.name}`;
+      } else {
+        fileSelectedName.innerText = '';
+      }
+    }
+
+    // File Input Event
+    resumeFileInput.addEventListener('change', (e) => {
+      if (e.target.files && e.target.files.length > 0) {
+        handleFileSelect(e.target.files[0]);
+      }
+    });
+
+    // Dropzone Events
+    dropzone.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      dropzone.classList.add('dragover');
+    });
+
+    dropzone.addEventListener('dragleave', () => dropzone.classList.remove('dragover'));
+
+    dropzone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      dropzone.classList.remove('dragover');
+      if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+        const file = e.dataTransfer.files[0];
+        try {
+          const dt = new DataTransfer();
+          dt.items.add(file);
+          resumeFileInput.files = dt.files;
+        } catch (err) {
+          console.warn('DataTransfer sync notice:', err);
+        }
+        handleFileSelect(file);
+      }
+    });
+
+    // Load Demo Profile Button
+    btnLoadDemo.addEventListener('click', () => {
+      profileText.value = DEMO_PROFILE_TEXT;
+      resumeFileInput.value = '';
+      selectedFile = null;
+      isNewFilePending = true;
+      updateFileLabel();
+      showToast('Demo profile loaded! Click "Next" or "Analyze Profile" to proceed.');
+    });
+
+    // Handle Re-upload / Change Profile
+    btnReUpload.addEventListener('click', () => {
+      switchTab('tab-upload');
+    });
+
+    // Form Submit: Parse Profile
+    uploadForm.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      await processProfileExtraction();
+    });
+
+    // Next Step Button Handler
+    if (btnNextStep) {
+      btnNextStep.addEventListener('click', handleNextFromUpload);
+    }
+
+    async function handleNextFromUpload() {
+      if (currentProfile && !isNewFilePending) {
+        switchTab('tab-career-fit');
+        document.getElementById('btnFetchCareerFit').click();
+        return;
+      }
+
+      const hasFile = !!selectedFile || (resumeFileInput.files && resumeFileInput.files.length > 0);
+      const textVal = profileText.value.trim();
+
+      if (!hasFile && !textVal) {
+        showToast('Please upload the file or paste profile text.');
+        return;
+      }
+
+      const success = await processProfileExtraction();
+      if (success) {
+        switchTab('tab-career-fit');
+        document.getElementById('btnFetchCareerFit').click();
+      }
+    }
+
+    // Core Profile Extraction Handler
+    async function processProfileExtraction() {
+      const fileToUpload = selectedFile || (resumeFileInput.files && resumeFileInput.files[0]);
+      const textVal = profileText.value.trim();
+
+      if (!fileToUpload && !textVal) {
+        showToast('Please upload the file or paste profile text.');
+        return false;
+      }
+
+      parseLoader.style.display = 'flex';
+      parsedResultCard.style.display = 'none';
+      if (btnNextStep) btnNextStep.disabled = true;
+
+      try {
+        const formData = new FormData();
+        if (fileToUpload) {
+          formData.append('resumeFile', fileToUpload);
+        }
+        if (textVal) {
+          formData.append('profileText', textVal);
+        }
+
+        const res = await fetch('/api/parse-profile', {
+          method: 'POST',
+          body: formData
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || 'Failed to parse profile.');
+        }
+
+        currentProfile = data.data;
+        isNewFilePending = false;
+        renderExtractedProfile(currentProfile);
+
+        // Show Active Profile Banner
+        activeProfileName.innerText = currentProfile.name || 'Candidate Profile';
+        activeProfileBanner.style.display = 'block';
+
+        showToast('Profile extracted successfully!');
+        return true;
+      } catch (err) {
+        showToast(err.message || 'An error occurred during parsing.');
+        return false;
+      } finally {
+        parseLoader.style.display = 'none';
+        if (btnNextStep) btnNextStep.disabled = false;
+      }
+    }
+
+    // Render Parsed Profile Results
+    function renderExtractedProfile(prof) {
+      parsedResultCard.style.display = 'block';
+
+      const techBadges = (prof.skills?.technical || []).map(s => `<span class="tag">${s}</span>`).join('');
+      const softBadges = (prof.skills?.soft || []).map(s => `<span class="tag tag-success">${s}</span>`).join('');
+
+      const eduItems = (prof.education || []).map(e => `
+        <div style="margin-bottom: 0.6rem;">
+          <strong>${e.degree || ''}</strong> - ${e.institution || ''} (${e.year || ''})
+          <div style="font-size: 0.85rem; color: var(--text-muted);">${e.details || ''}</div>
+        </div>
+      `).join('');
+
+      const projItems = (prof.projects || []).map(p => `
+        <div style="margin-bottom: 0.8rem;">
+          <strong style="color: var(--accent-cyan);">${p.title || ''}</strong>
+          <p style="font-size: 0.9rem; margin: 0.2rem 0;">${p.description || ''}</p>
+          <div class="tag-container">
+            ${(p.techStack || []).map(t => `<span class="tag" style="font-size: 0.75rem;">${t}</span>`).join('')}
+          </div>
+        </div>
+      `).join('');
+
+      const expItems = (prof.experience || []).map(ex => `
+        <div style="margin-bottom: 0.8rem;">
+          <strong>${ex.role || ''}</strong> at ${ex.company || ''} <span style="font-size: 0.8rem; color: var(--text-muted);">(${ex.duration || ''})</span>
+          <p style="font-size: 0.9rem; color: var(--text-muted);">${ex.description || ''}</p>
+        </div>
+      `).join('');
+
+      parsedSummaryContent.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem;">
+          <div>
+            <h4 style="color: var(--accent-cyan); margin-bottom: 0.4rem;"><i class="fa-solid fa-user"></i> Summary</h4>
+            <p style="font-size: 0.92rem; color: var(--text-main); margin-bottom: 1.2rem;">${prof.summary || 'N/A'}</p>
+
+            <h4 style="color: var(--accent-cyan); margin-bottom: 0.4rem;"><i class="fa-solid fa-code"></i> Technical Skills</h4>
+            <div class="tag-container" style="margin-bottom: 1.2rem;">${techBadges || 'None listed'}</div>
+
+            <h4 style="color: var(--accent-cyan); margin-bottom: 0.4rem;"><i class="fa-solid fa-comments"></i> Soft Skills</h4>
+            <div class="tag-container" style="margin-bottom: 1.2rem;">${softBadges || 'None listed'}</div>
+          </div>
+
+          <div>
+            <h4 style="color: var(--accent-cyan); margin-bottom: 0.4rem;"><i class="fa-solid fa-graduation-cap"></i> Education</h4>
+            <div style="margin-bottom: 1.2rem;">${eduItems || 'N/A'}</div>
+
+            <h4 style="color: var(--accent-cyan); margin-bottom: 0.4rem;"><i class="fa-solid fa-laptop-code"></i> Key Projects</h4>
+            <div style="margin-bottom: 1.2rem;">${projItems || 'N/A'}</div>
+
+            <h4 style="color: var(--accent-cyan); margin-bottom: 0.4rem;"><i class="fa-solid fa-briefcase"></i> Experience</h4>
+            <div>${expItems || 'Fresh Graduate / No formal experience listed'}</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid var(--border-color); display: flex; justify-content: flex-end; gap: 1rem;">
+          <button class="btn" onclick="switchTab('tab-career-fit'); document.getElementById('btnFetchCareerFit').click();">
+            Next: Evaluate Career Fit <i class="fa-solid fa-arrow-right"></i>
+          </button>
+        </div>
+      `;
+    }
+
+    // TAB 2: Career Fit
+    const btnFetchCareerFit = document.getElementById('btnFetchCareerFit');
+    const careerFitLoader = document.getElementById('careerFitLoader');
+    const careerFitContent = document.getElementById('careerFitContent');
+
+    btnFetchCareerFit.addEventListener('click', async () => {
+      if (!currentProfile) {
+        showToast('Please upload or extract a profile first.');
+        switchTab('tab-upload');
+        return;
+      }
+
+      careerFitLoader.style.display = 'flex';
+      careerFitContent.innerHTML = '';
+
+      try {
+        const res = await fetch('/api/career-fit', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ profile: currentProfile })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.error || 'Failed to analyze career fit.');
+
+        renderCareerFitRoles(data.data.topRoles || []);
+      } catch (err) {
+        showToast(err.message);
+      } finally {
+        careerFitLoader.style.display = 'none';
+      }
+    });
+
+    function renderCareerFitRoles(roles) {
+      if (!roles || roles.length === 0) {
+        careerFitContent.innerHTML = '<p>No roles returned.</p>';
+        return;
+      }
+
+      careerFitContent.innerHTML = roles.map((role, idx) => {
+        const matchSkills = (role.matchingSkills || []).map(s => `<span class="tag tag-success">${s}</span>`).join('');
+        const missSkills = (role.missingSkills || []).map(s => `<span class="tag tag-warning">${s}</span>`).join('');
+        const learnSteps = (role.whatToLearn || []).map(step => `<li style="margin-bottom: 0.3rem;">${step}</li>`).join('');
+
+        return `
+          <div class="role-card">
+            <div>
+              <div class="role-header">
+                <div>
+                  <span style="font-size: 0.8rem; font-weight: 700; color: var(--accent-cyan); text-transform: uppercase;">Rank #${role.rank || (idx + 1)}</span>
+                  <h3 class="role-title">${role.roleTitle}</h3>
+                </div>
+                <div class="match-badge">${role.matchPercentage}% Match</div>
+              </div>
+
+              <p style="font-size: 0.9rem; color: var(--text-muted); margin-bottom: 1rem;">${role.reasoning}</p>
+
+              <div style="margin-bottom: 0.8rem;">
+                <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.3rem;">Matching Skills:</div>
+                <div class="tag-container">${matchSkills || '<span class="tag">N/A</span>'}</div>
+              </div>
+
+              <div style="margin-bottom: 1rem;">
+                <div style="font-size: 0.82rem; font-weight: 600; color: var(--text-muted); margin-bottom: 0.3rem;">Missing Skills to Learn:</div>
+                <div class="tag-container">${missSkills || '<span class="tag">None!</span>'}</div>
+              </div>
+            </div>
+
+            <div style="padding-top: 0.8rem; border-top: 1px solid var(--border-color);">
+              <div style="font-size: 0.85rem; font-weight: 600; color: var(--accent-cyan); margin-bottom: 0.4rem;"><i class="fa-solid fa-road"></i> Learning Action Items:</div>
+              <ul style="font-size: 0.85rem; color: var(--text-muted); padding-left: 1.2rem;">
+                ${learnSteps}
+              </ul>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // TAB 3: Job Role Checker
+    const targetRoleInput = document.getElementById('targetRoleInput');
+    const btnCheckRole = document.getElementById('btnCheckRole');
+    const roleCheckerLoader = document.getElementById('roleCheckerLoader');
+    const roleCheckerResults = document.getElementById('roleCheckerResults');
+
+    // Popular role chips listener
+    document.querySelectorAll('.chip').forEach(chip => {
+      chip.addEventListener('click', () => {
+        targetRoleInput.value = chip.dataset.role;
+        btnCheckRole.click();
+      });
+    });
+
+    btnCheckRole.addEventListener('click', async () => {
+      const roleText = targetRoleInput.value.trim();
+      if (!roleText) {
+        showToast('Please enter a target role name.');
+        return;
+      }
+      if (!currentProfile) {
+        showToast('Please load a profile first.');
+        switchTab('tab-upload');
+        return;
+      }
+
+      roleCheckerLoader.style.display = 'flex';
+      roleCheckerResults.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/check-role', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ profile: currentProfile, targetRole: roleText })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.error || 'Failed to check role fit.');
+
+        renderRoleCheckerResults(data.data);
+      } catch (err) {
+        showToast(err.message);
+      } finally {
+        roleCheckerLoader.style.display = 'none';
+      }
+    });
+
+    function renderRoleCheckerResults(resData) {
+      roleCheckerResults.style.display = 'block';
+
+      const fitClass = `fit-${(resData.fitCategory || 'Moderate-Fit').replace(/\s+/g, '-')}`;
+      const matchSkills = (resData.matchingSkills || []).map(s => `<span class="tag tag-success">${s}</span>`).join('');
+      const missSkills = (resData.missingSkills || []).map(s => `<span class="tag tag-warning">${s}</span>`).join('');
+      const roadmapItems = (resData.actionableRoadmap || []).map(item => `<li style="margin-bottom: 0.5rem;">${item}</li>`).join('');
+
+      roleCheckerResults.innerHTML = `
+        <div class="fit-status-banner ${fitClass}">
+          <i class="fa-solid fa-award" style="font-size: 1.8rem;"></i>
+          <div>
+            <div style="font-size: 0.85rem; text-transform: uppercase; opacity: 0.9;">Target Role Fit Assessment</div>
+            <div style="font-size: 1.4rem; font-weight: 800;">${resData.fitCategory} (${resData.matchPercentage}% Compatibility)</div>
+          </div>
+        </div>
+
+        <div class="comparison-box">
+          <div class="comparison-title">Fit Rationale</div>
+          <p style="font-size: 0.95rem;">${resData.explanation}</p>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-top: 1.2rem;">
+          <div>
+            <h4 style="font-size: 0.95rem; color: var(--accent-green); margin-bottom: 0.5rem;"><i class="fa-solid fa-circle-check"></i> Matching Skills Possessed</h4>
+            <div class="tag-container">${matchSkills || '<span class="tag">None</span>'}</div>
+          </div>
+
+          <div>
+            <h4 style="font-size: 0.95rem; color: var(--accent-amber); margin-bottom: 0.5rem;"><i class="fa-solid fa-triangle-exclamation"></i> Missing Required Skills</h4>
+            <div class="tag-container">${missSkills || '<span class="tag">None</span>'}</div>
+          </div>
+        </div>
+
+        <div style="margin-top: 1.5rem;">
+          <h4 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 0.6rem;"><i class="fa-solid fa-map-location-dot"></i> Actionable Readiness Roadmap</h4>
+          <ol style="padding-left: 1.2rem; color: var(--text-main); font-size: 0.92rem;">
+            ${roadmapItems}
+          </ol>
+        </div>
+      `;
+    }
+
+    // TAB 4: JD Analyzer
+    const jdInputText = document.getElementById('jdInputText');
+    const btnInsertSampleJD = document.getElementById('btnInsertSampleJD');
+    const btnAnalyzeJD = document.getElementById('btnAnalyzeJD');
+    const jdLoader = document.getElementById('jdLoader');
+    const jdResults = document.getElementById('jdResults');
+
+    btnInsertSampleJD.addEventListener('click', () => {
+      jdInputText.value = SAMPLE_JD_TEXT;
+      showToast('Sample Data Analyst Job Description inserted!');
+    });
+
+    btnAnalyzeJD.addEventListener('click', async () => {
+      const jdText = jdInputText.value.trim();
+      if (!jdText) {
+        showToast('Please paste a Job Description first.');
+        return;
+      }
+      if (!currentProfile) {
+        showToast('Please load a student profile first.');
+        switchTab('tab-upload');
+        return;
+      }
+
+      jdLoader.style.display = 'flex';
+      jdResults.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/analyze-jd', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ profile: currentProfile, jobDescription: jdText })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.error || 'Failed to analyze JD.');
+
+        renderJDResults(data.data);
+      } catch (err) {
+        showToast(err.message);
+      } finally {
+        jdLoader.style.display = 'none';
+      }
+    });
+
+    function renderJDResults(jdData) {
+      jdResults.style.display = 'block';
+
+      const matchSkills = (jdData.matchingSkills || []).map(s => `<span class="tag tag-success">${s}</span>`).join('');
+      const missSkills = (jdData.missingSkills || []).map(s => `<span class="tag tag-warning">${s}</span>`).join('');
+      const missKeywords = (jdData.missingKeywords || []).map(k => `<span class="tag tag-danger">${k}</span>`).join('');
+      const expGaps = (jdData.experienceGaps || []).map(g => `<li style="margin-bottom: 0.4rem;">${g}</li>`).join('');
+      const updates = (jdData.resumeUpdateSuggestions || []).map(u => `<li style="margin-bottom: 0.4rem;">${u}</li>`).join('');
+
+      jdResults.innerHTML = `
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
+          <div style="background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: var(--radius-md); padding: 1.2rem; text-align: center;">
+            <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted);">Overall Match</div>
+            <div style="font-size: 2.2rem; font-weight: 800; color: var(--primary);">${jdData.matchPercentage}%</div>
+          </div>
+          <div style="background: rgba(6, 182, 212, 0.12); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: var(--radius-md); padding: 1.2rem; text-align: center;">
+            <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted);">ATS Compatibility</div>
+            <div style="font-size: 2.2rem; font-weight: 800; color: var(--accent-cyan);">${jdData.atsCompatibilityIndex}%</div>
+          </div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 1.5rem; margin-bottom: 1.5rem;">
+          <div>
+            <h4 style="font-size: 0.95rem; color: var(--accent-green); margin-bottom: 0.5rem;"><i class="fa-solid fa-circle-check"></i> Matching Skills</h4>
+            <div class="tag-container" style="margin-bottom: 1.2rem;">${matchSkills || '<span class="tag">None</span>'}</div>
+
+            <h4 style="font-size: 0.95rem; color: var(--accent-amber); margin-bottom: 0.5rem;"><i class="fa-solid fa-triangle-exclamation"></i> Missing Required Skills</h4>
+            <div class="tag-container">${missSkills || '<span class="tag">None</span>'}</div>
+          </div>
+
+          <div>
+            <h4 style="font-size: 0.95rem; color: var(--accent-rose); margin-bottom: 0.5rem;"><i class="fa-solid fa-key"></i> Missing ATS Keywords</h4>
+            <div class="tag-container" style="margin-bottom: 1.2rem;">${missKeywords || '<span class="tag">None</span>'}</div>
+
+            <h4 style="font-size: 0.95rem; color: var(--text-main); margin-bottom: 0.5rem;"><i class="fa-solid fa-hourglass-half"></i> Experience Gaps</h4>
+            <ul style="font-size: 0.88rem; color: var(--text-muted); padding-left: 1.2rem;">${expGaps || '<li>No major experience gaps identified.</li>'}</ul>
+          </div>
+        </div>
+
+        <div class="comparison-box" style="border-left-color: var(--accent-cyan);">
+          <div class="comparison-title"><i class="fa-solid fa-list-check"></i> Actionable Resume Adjustments to Pass ATS</div>
+          <ul style="font-size: 0.92rem; padding-left: 1.2rem;">
+            ${updates}
+          </ul>
+        </div>
+      `;
+    }
+
+    // TAB 5: Resume Builder / Improvement
+    const btnGenerateImprovements = document.getElementById('btnGenerateImprovements');
+    const resumeImproveLoader = document.getElementById('resumeImproveLoader');
+    const resumeImproveResults = document.getElementById('resumeImproveResults');
+
+    btnGenerateImprovements.addEventListener('click', async () => {
+      if (!currentProfile) {
+        showToast('Please load a student profile first.');
+        switchTab('tab-upload');
+        return;
+      }
+
+      resumeImproveLoader.style.display = 'flex';
+      resumeImproveResults.style.display = 'none';
+
+      try {
+        const res = await fetch('/api/improve-resume', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ profile: currentProfile })
+        });
+
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.error || 'Failed to generate resume improvements.');
+
+        renderResumeImprovements(data.data);
+      } catch (err) {
+        showToast(err.message);
+      } finally {
+        resumeImproveLoader.style.display = 'none';
+      }
+    });
+
+    function renderResumeImprovements(impData) {
+      resumeImproveResults.style.display = 'block';
+
+      const projBulleted = (impData.projectsImprovement || []).map(p => `
+        <div style="margin-bottom: 1.2rem;">
+          <h4 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 0.4rem;">Project: ${p.projectTitle || 'Project'}</h4>
+          <ul style="font-size: 0.9rem; padding-left: 1.2rem; color: var(--text-main);">
+            ${(p.improvedBullets || []).map(b => `<li style="margin-bottom: 0.3rem;">${b}</li>`).join('')}
+          </ul>
+        </div>
+      `).join('');
+
+      const expBulleted = (impData.experienceImprovement || []).map(ex => `
+        <div style="margin-bottom: 1.2rem;">
+          <h4 style="font-size: 1rem; color: var(--accent-cyan); margin-bottom: 0.4rem;">${ex.role || 'Role'} at ${ex.company || 'Company'}</h4>
+          <ul style="font-size: 0.9rem; padding-left: 1.2rem; color: var(--text-main);">
+            ${(ex.improvedBullets || []).map(b => `<li style="margin-bottom: 0.3rem;">${b}</li>`).join('')}
+          </ul>
+        </div>
+      `).join('');
+
+      const generalTips = (impData.generalTips || []).map(t => `<li style="margin-bottom: 0.3rem;">${t}</li>`).join('');
+
+      resumeImproveResults.innerHTML = `
+        <!-- Headline Comparison -->
+        <div class="comparison-box" style="margin-bottom: 1.5rem;">
+          <div class="comparison-title"><i class="fa-solid fa-heading"></i> Professional Headline Optimization</div>
+          <div style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 0.3rem;">Current: ${impData.headline?.current || 'N/A'}</div>
+          <div style="font-size: 1.05rem; font-weight: 600; color: var(--accent-green);">
+            Suggested: ${impData.headline?.suggested || ''}
+          </div>
+        </div>
+
+        <!-- Summary Comparison -->
+        <div class="comparison-box" style="margin-bottom: 1.5rem; border-left-color: var(--accent-green);">
+          <div class="comparison-title"><i class="fa-solid fa-align-left"></i> Summary Statement Optimization</div>
+          <div style="font-size: 0.95rem; color: var(--text-main); margin-top: 0.4rem;">
+            ${impData.summary?.suggested || ''}
+          </div>
+        </div>
+
+        <!-- Projects Enhancement -->
+        <div class="glass-card" style="padding: 1.2rem; margin-bottom: 1.5rem;">
+          <h3 class="card-title" style="font-size: 1.1rem;"><i class="fa-solid fa-diagram-project"></i> Project Highlights (Action Verb + Quantifiable Impact)</h3>
+          ${projBulleted || '<p style="font-size: 0.9rem; color: var(--text-muted);">No projects specified.</p>'}
+        </div>
+
+        <!-- Experience Enhancement -->
+        <div class="glass-card" style="padding: 1.2rem; margin-bottom: 1.5rem;">
+          <h3 class="card-title" style="font-size: 1.1rem;"><i class="fa-solid fa-briefcase"></i> Experience Bullet Point Enhancements</h3>
+          ${expBulleted || '<p style="font-size: 0.9rem; color: var(--text-muted);">No formal experience specified.</p>'}
+        </div>
+
+        <!-- Strategic Tips -->
+        <div style="background: rgba(99, 102, 241, 0.08); border-radius: var(--radius-md); padding: 1.2rem; border: 1px solid rgba(99, 102, 241, 0.2);">
+          <h4 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 0.5rem;"><i class="fa-solid fa-lightbulb"></i> Expert Strategy Tips</h4>
+          <ul style="font-size: 0.88rem; color: var(--text-muted); padding-left: 1.2rem;">
+            ${generalTips}
+          </ul>
+        </div>
+      `;
+    }
+  </script>
+</body>
+
+</html>
