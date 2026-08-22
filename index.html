@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Resume Analizer</title>
+  <title>AI Resume Bot - Career & Resume Analyzer</title>
   <!-- Google Fonts: Inter & Outfit -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,19 +16,19 @@
 
   <style>
     :root {
-      --bg-dark: #0b0f19;
-      --bg-card: rgba(18, 26, 43, 0.75);
-      --bg-card-hover: rgba(26, 38, 63, 0.85);
-      --border-color: rgba(255, 255, 255, 0.1);
-      --border-highlight: rgba(99, 102, 241, 0.4);
-      --primary: #6366f1;
-      --primary-gradient: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
-      --accent-cyan: #06b6d4;
-      --accent-green: #10b981;
-      --accent-amber: #f59e0b;
-      --accent-rose: #f43f5e;
-      --text-main: #f3f4f6;
-      --text-muted: #9ca3af;
+      --bg-dark: #f8fafc;
+      --bg-card: #ffffff;
+      --bg-card-hover: #ffffff;
+      --border-color: #e2e8f0;
+      --border-highlight: rgba(79, 70, 229, 0.4);
+      --primary: #4f46e5;
+      --primary-gradient: linear-gradient(135deg, #4f46e5 0%, #7c3aed 50%, #db2777 100%);
+      --accent-cyan: #0284c7;
+      --accent-green: #059669;
+      --accent-amber: #d97706;
+      --accent-rose: #e11d48;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
       --glass-blur: blur(16px);
       --radius-sm: 8px;
       --radius-md: 14px;
@@ -45,9 +45,9 @@
       font-family: 'Inter', sans-serif;
       background-color: var(--bg-dark);
       background-image:
-        radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
-        radial-gradient(circle at 85% 75%, rgba(236, 72, 153, 0.12) 0%, transparent 40%),
-        radial-gradient(circle at 50% 50%, rgba(6, 182, 212, 0.08) 0%, transparent 50%);
+        radial-gradient(circle at 15% 20%, rgba(79, 70, 229, 0.05) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(219, 39, 119, 0.04) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(2, 132, 199, 0.03) 0%, transparent 50%);
       color: var(--text-main);
       min-height: 100vh;
       line-height: 1.6;
@@ -58,12 +58,13 @@
     /* Header & Navigation */
     header {
       backdrop-filter: var(--glass-blur);
-      background: rgba(11, 15, 25, 0.8);
+      background: rgba(255, 255, 255, 0.85);
       border-bottom: 1px solid var(--border-color);
       position: sticky;
       top: 0;
       z-index: 100;
       padding: 1rem 2rem;
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.04);
     }
 
     .header-container {
@@ -79,32 +80,88 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 0.75rem;
+      gap: 0.85rem;
       font-family: 'Outfit', sans-serif;
-      font-size: 1.4rem;
+      text-decoration: none;
+    }
+
+    .brand-text {
+      display: flex;
+      flex-direction: column;
+      line-height: 1.2;
+    }
+
+    .brand-title {
+      font-size: 1.35rem;
       font-weight: 800;
       background: var(--primary-gradient);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
+      letter-spacing: -0.3px;
+    }
+
+    .brand-tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      letter-spacing: 0.6px;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
     }
 
     .brand-icon {
-      width: 40px;
-      height: 40px;
-      background: var(--primary-gradient);
-      border-radius: var(--radius-sm);
+      width: 48px;
+      height: 48px;
+      background: #090d16;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      color: white;
-      font-size: 1.2rem;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+      color: var(--primary);
+      font-size: 1.35rem;
+      border: 1px solid rgba(2, 132, 199, 0.3);
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.25);
+      position: relative;
+      animation: botPulse 3s infinite ease-in-out;
+    }
+
+    .brand-logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 11px;
+    }
+
+    .bot-status-dot {
+      position: absolute;
+      top: -2px;
+      right: -2px;
+      width: 10px;
+      height: 10px;
+      background: #10b981;
+      border: 2px solid white;
+      border-radius: 50%;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    @keyframes botPulse {
+
+      0%,
+      100% {
+        box-shadow: 0 4px 15px rgba(79, 70, 229, 0.2);
+      }
+
+      50% {
+        box-shadow: 0 4px 22px rgba(124, 58, 237, 0.45);
+      }
     }
 
     nav {
       display: flex;
       gap: 0.5rem;
-      background: rgba(255, 255, 255, 0.05);
+      background: #f1f5f9;
       padding: 4px;
       border-radius: var(--radius-md);
       border: 1px solid var(--border-color);
@@ -129,13 +186,13 @@
 
     .nav-btn:hover {
       color: var(--text-main);
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.9);
     }
 
     .nav-btn.active {
       background: var(--primary);
       color: white;
-      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.4);
+      box-shadow: 0 2px 10px rgba(79, 70, 229, 0.3);
       font-weight: 600;
     }
 
@@ -156,12 +213,13 @@
       border-radius: var(--radius-lg);
       padding: 1.8rem;
       margin-bottom: 2rem;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-      transition: transform 0.2s ease, border-color 0.2s ease;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.05);
+      transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
     }
 
     .glass-card:hover {
       border-color: var(--border-highlight);
+      box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08);
     }
 
     .card-title {
@@ -195,12 +253,12 @@
       border-radius: var(--radius-md);
       cursor: pointer;
       transition: all 0.25s ease;
-      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
     }
 
     .btn:hover {
       transform: translateY(-2px);
-      box-shadow: 0 6px 20px rgba(99, 102, 241, 0.5);
+      box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
     }
 
     .btn:disabled {
@@ -210,14 +268,15 @@
     }
 
     .btn-secondary {
-      background: rgba(255, 255, 255, 0.08);
+      background: #f1f5f9;
       border: 1px solid var(--border-color);
+      color: var(--text-main);
       box-shadow: none;
     }
 
     .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.15);
-      box-shadow: 0 4px 12px rgba(255, 255, 255, 0.1);
+      background: #e2e8f0;
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.06);
     }
 
     .btn-outline-cyan {
@@ -228,16 +287,16 @@
     }
 
     .btn-outline-cyan:hover {
-      background: rgba(6, 182, 212, 0.15);
+      background: rgba(2, 132, 199, 0.08);
     }
 
     /* Upload Area */
     .upload-dropzone {
-      border: 2px dashed rgba(99, 102, 241, 0.4);
+      border: 2px dashed rgba(79, 70, 229, 0.35);
       border-radius: var(--radius-md);
       padding: 2.5rem 1.5rem;
       text-align: center;
-      background: rgba(99, 102, 241, 0.03);
+      background: rgba(79, 70, 229, 0.02);
       cursor: pointer;
       transition: all 0.3s ease;
     }
@@ -245,7 +304,7 @@
     .upload-dropzone:hover,
     .upload-dropzone.dragover {
       border-color: var(--primary);
-      background: rgba(99, 102, 241, 0.08);
+      background: rgba(79, 70, 229, 0.06);
     }
 
     .upload-icon {
@@ -280,21 +339,21 @@
     textarea,
     input[type="text"] {
       width: 100%;
-      background: rgba(15, 23, 42, 0.8);
+      background: #ffffff;
       border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
       color: var(--text-main);
       padding: 0.9rem 1.2rem;
       font-family: inherit;
       font-size: 0.95rem;
-      transition: border-color 0.2s ease;
+      transition: border-color 0.2s ease, box-shadow 0.2s ease;
       outline: none;
     }
 
     textarea:focus,
     input[type="text"]:focus {
       border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.15);
     }
 
     /* Section Tabs / Panels */
@@ -328,9 +387,9 @@
     }
 
     .tag {
-      background: rgba(99, 102, 241, 0.15);
-      border: 1px solid rgba(99, 102, 241, 0.3);
-      color: #c7d2fe;
+      background: rgba(79, 70, 229, 0.08);
+      border: 1px solid rgba(79, 70, 229, 0.2);
+      color: #4338ca;
       padding: 0.25rem 0.75rem;
       border-radius: 50px;
       font-size: 0.82rem;
@@ -341,21 +400,21 @@
     }
 
     .tag-success {
-      background: rgba(16, 185, 129, 0.15);
-      border-color: rgba(16, 185, 129, 0.3);
-      color: #a7f3d0;
+      background: rgba(5, 150, 105, 0.08);
+      border-color: rgba(5, 150, 105, 0.2);
+      color: #047857;
     }
 
     .tag-warning {
-      background: rgba(245, 158, 11, 0.15);
-      border-color: rgba(245, 158, 11, 0.3);
-      color: #fde68a;
+      background: rgba(217, 119, 6, 0.08);
+      border-color: rgba(217, 119, 6, 0.2);
+      color: #b45309;
     }
 
     .tag-danger {
-      background: rgba(244, 63, 94, 0.15);
-      border-color: rgba(244, 63, 94, 0.3);
-      color: #fecdd3;
+      background: rgba(225, 29, 72, 0.08);
+      border-color: rgba(225, 29, 72, 0.2);
+      color: #be123c;
     }
 
     /* Top Roles Cards */
@@ -366,7 +425,7 @@
     }
 
     .role-card {
-      background: rgba(15, 23, 42, 0.8);
+      background: #ffffff;
       border: 1px solid var(--border-color);
       border-radius: var(--radius-md);
       padding: 1.5rem;
@@ -375,6 +434,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
+      box-shadow: 0 4px 15px rgba(15, 23, 42, 0.04);
     }
 
     .role-header {
@@ -391,7 +451,7 @@
       border-radius: 50px;
       font-weight: 700;
       font-size: 0.9rem;
-      box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 2px 10px rgba(79, 70, 229, 0.3);
     }
 
     .role-title {
@@ -414,35 +474,38 @@
     }
 
     .fit-Strong-Fit {
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      color: #34d399;
+      background: rgba(5, 150, 105, 0.08);
+      border: 1px solid rgba(5, 150, 105, 0.3);
+      color: #047857;
     }
 
     .fit-Moderate-Fit {
-      background: rgba(6, 182, 212, 0.15);
-      border: 1px solid rgba(6, 182, 212, 0.4);
-      color: #22d3ee;
+      background: rgba(2, 132, 199, 0.08);
+      border: 1px solid rgba(2, 132, 199, 0.3);
+      color: #0369a1;
     }
 
     .fit-Needs-Improvement {
-      background: rgba(245, 158, 11, 0.15);
-      border: 1px solid rgba(245, 158, 11, 0.4);
-      color: #fbbf24;
+      background: rgba(217, 119, 6, 0.08);
+      border: 1px solid rgba(217, 119, 6, 0.3);
+      color: #b45309;
     }
 
     .fit-Poor-Fit {
-      background: rgba(244, 63, 94, 0.15);
-      border: 1px solid rgba(244, 63, 94, 0.4);
-      color: #f87171;
+      background: rgba(225, 29, 72, 0.08);
+      border: 1px solid rgba(225, 29, 72, 0.3);
+      color: #be123c;
     }
 
     /* Comparison Box */
     .comparison-box {
-      background: rgba(15, 23, 42, 0.7);
+      background: #f8fafc;
       border-radius: var(--radius-md);
       padding: 1.2rem;
       border-left: 4px solid var(--primary);
+      border-top: 1px solid var(--border-color);
+      border-right: 1px solid var(--border-color);
+      border-bottom: 1px solid var(--border-color);
       margin-bottom: 1rem;
     }
 
@@ -452,6 +515,7 @@
       letter-spacing: 0.5px;
       color: var(--text-muted);
       margin-bottom: 0.4rem;
+      font-weight: 600;
     }
 
     /* Loader Overlay */
@@ -467,7 +531,7 @@
     .spinner {
       width: 50px;
       height: 50px;
-      border: 4px solid rgba(255, 255, 255, 0.1);
+      border: 4px solid #e2e8f0;
       border-top-color: var(--primary);
       border-radius: 50%;
       animation: spin 1s infinite linear;
@@ -489,12 +553,12 @@
       position: fixed;
       bottom: 2rem;
       right: 2rem;
-      background: #1e293b;
+      background: #0f172a;
       color: white;
       padding: 1rem 1.5rem;
       border-radius: var(--radius-md);
       border-left: 4px solid var(--primary);
-      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+      box-shadow: 0 10px 25px rgba(15, 23, 42, 0.2);
       display: flex;
       align-items: center;
       gap: 0.8rem;
@@ -527,7 +591,7 @@
     }
 
     .chip {
-      background: rgba(255, 255, 255, 0.06);
+      background: #f1f5f9;
       border: 1px solid var(--border-color);
       color: var(--text-muted);
       padding: 0.3rem 0.7rem;
@@ -538,8 +602,8 @@
     }
 
     .chip:hover {
-      background: rgba(99, 102, 241, 0.2);
-      color: var(--text-main);
+      background: rgba(79, 70, 229, 0.1);
+      color: var(--primary);
       border-color: var(--primary);
     }
   </style>
@@ -551,8 +615,14 @@
   <header>
     <div class="header-container">
       <div class="brand">
-        <div class="brand-icon"><i class="fa-solid fa-graduation-cap"></i></div>
-        <span>Resume Analizer</span>
+        <div class="brand-icon">
+          <img src="ai_bot_logo.png" alt="Resume AI Logo" class="brand-logo-img" />
+          <span class="bot-status-dot"></span>
+        </div>
+        <div class="brand-text">
+          <span class="brand-title">AI Resume</span>
+          <span class="brand-tag"><i class="fa-solid fa-brain"></i> AI Agent</span>
+        </div>
       </div>
 
       <nav id="mainNav">
@@ -580,15 +650,21 @@
 
     <!-- Global Active Profile Status Banner -->
     <div id="activeProfileBanner" class="glass-card"
-      style="display: none; padding: 1rem 1.5rem; margin-bottom: 1.5rem; background: rgba(99, 102, 241, 0.1); border-color: rgba(99, 102, 241, 0.3);">
-      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem;">
-        <div>
-          <i class="fa-solid fa-circle-check" style="color: var(--accent-green);"></i>
-          <span style="font-weight: 600; margin-left: 0.4rem;">Active Profile:</span>
-          <span id="activeProfileName" style="color: var(--accent-cyan); font-weight: 500;">Alex Rivera (Computer
-            Science Student)</span>
+      style="display: none; padding: 1rem 1.5rem; margin-bottom: 1.5rem; background: rgba(5, 150, 105, 0.05); border: 1px solid rgba(5, 150, 105, 0.25);">
+      <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.8rem;">
+        <div style="display: flex; align-items: center; gap: 0.6rem; flex-wrap: wrap;">
+          <i class="fa-solid fa-circle-check" style="color: var(--accent-green); font-size: 1.3rem;"></i>
+          <div>
+            <span style="font-weight: 700; color: var(--text-main);">Active Profile:</span>
+            <span id="activeProfileName" style="color: var(--primary); font-weight: 600; margin-left: 0.3rem;">Alex
+              Rivera</span>
+          </div>
+          <span class="tag tag-success"
+            style="font-size: 0.82rem; font-weight: 600; padding: 0.3rem 0.8rem; margin-left: 0.4rem;">
+            <i class="fa-solid fa-thumbs-up"></i> Profile Status: Good (Ready)
+          </span>
         </div>
-        <button id="btnReUpload" class="btn btn-secondary" style="padding: 0.3rem 0.8rem; font-size: 0.8rem;">
+        <button id="btnReUpload" class="btn btn-secondary" style="padding: 0.4rem 0.9rem; font-size: 0.85rem;">
           <i class="fa-solid fa-arrows-rotate"></i> Change Profile
         </button>
       </div>
@@ -618,7 +694,7 @@
             <p style="color: var(--text-muted); font-size: 0.85rem; margin-bottom: 1rem;">Supports PDF, DOCX, or TXT
               (Max 10MB)</p>
             <label for="resumeFile" class="btn btn-secondary">
-              <i class="fa-solid fa-folder-open"></i> Browse File
+              <i class="fa-solid fa-folder-open"></i> Select Resume File
             </label>
             <input type="file" id="resumeFile" name="resumeFile" class="file-input" accept=".pdf,.docx,.txt" />
             <div id="fileSelectedName" style="margin-top: 0.8rem; font-weight: 600; color: var(--accent-cyan);"></div>
@@ -655,7 +731,13 @@
 
       <!-- Parsed Results Container -->
       <div id="parsedResultCard" class="glass-card" style="display: none;">
-        <h3 class="card-title"><i class="fa-solid fa-id-card"></i> Extracted Student Profile Summary</h3>
+        <div
+          style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 1rem;">
+          <h3 class="card-title" style="margin-bottom: 0;"><i class="fa-solid fa-id-card"></i> Extracted Student Profile
+            Summary</h3>
+          <span class="tag tag-success" style="font-weight: 600; font-size: 0.85rem;"><i
+              class="fa-solid fa-circle-check"></i> Profile Status: Good</span>
+        </div>
         <div id="parsedSummaryContent"></div>
       </div>
     </section>
@@ -779,7 +861,7 @@
 
         <!-- Ethical AI Notice -->
         <div
-          style="background: rgba(6, 182, 212, 0.1); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: var(--radius-md); padding: 0.9rem 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem; font-size: 0.88rem; color: #a5f3fc;">
+          style="background: rgba(2, 132, 199, 0.06); border: 1px solid rgba(2, 132, 199, 0.2); border-radius: var(--radius-md); padding: 0.9rem 1.2rem; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 0.8rem; font-size: 0.88rem; color: #0369a1;">
           <i class="fa-solid fa-shield-halved" style="font-size: 1.2rem; color: var(--accent-cyan);"></i>
           <span><strong>Ethical Resume Guarantee:</strong> Suggestions optimize impact, action verbs, and structure
             using ONLY your verified background. AI will never invent false experience or skills.</span>
@@ -798,7 +880,7 @@
 
   <!-- Footer -->
   <footer>
-    <p>Student Career & Resume Agent &copy; 2026. Powered by OpenRouter AI & Node.js backend.</p>
+    <p>AI Resume Bot &copy; 2026. Powered by OpenRouter AI & Node.js backend.</p>
   </footer>
 
   <!-- Toast Element -->
@@ -1391,11 +1473,11 @@ Requirements:
 
       jdResults.innerHTML = `
         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 1.5rem;">
-          <div style="background: rgba(99, 102, 241, 0.12); border: 1px solid rgba(99, 102, 241, 0.3); border-radius: var(--radius-md); padding: 1.2rem; text-align: center;">
+          <div style="background: rgba(79, 70, 229, 0.05); border: 1px solid rgba(79, 70, 229, 0.2); border-radius: var(--radius-md); padding: 1.2rem; text-align: center;">
             <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted);">Overall Match</div>
             <div style="font-size: 2.2rem; font-weight: 800; color: var(--primary);">${jdData.matchPercentage}%</div>
           </div>
-          <div style="background: rgba(6, 182, 212, 0.12); border: 1px solid rgba(6, 182, 212, 0.3); border-radius: var(--radius-md); padding: 1.2rem; text-align: center;">
+          <div style="background: rgba(2, 132, 199, 0.05); border: 1px solid rgba(2, 132, 199, 0.2); border-radius: var(--radius-md); padding: 1.2rem; text-align: center;">
             <div style="font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted);">ATS Compatibility</div>
             <div style="font-size: 2.2rem; font-weight: 800; color: var(--accent-cyan);">${jdData.atsCompatibilityIndex}%</div>
           </div>
@@ -1515,7 +1597,7 @@ Requirements:
         </div>
 
         <!-- Strategic Tips -->
-        <div style="background: rgba(99, 102, 241, 0.08); border-radius: var(--radius-md); padding: 1.2rem; border: 1px solid rgba(99, 102, 241, 0.2);">
+        <div style="background: rgba(79, 70, 229, 0.04); border-radius: var(--radius-md); padding: 1.2rem; border: 1px solid rgba(79, 70, 229, 0.15);">
           <h4 style="font-size: 0.95rem; color: var(--primary); margin-bottom: 0.5rem;"><i class="fa-solid fa-lightbulb"></i> Expert Strategy Tips</h4>
           <ul style="font-size: 0.88rem; color: var(--text-muted); padding-left: 1.2rem;">
             ${generalTips}
